@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatDelegate
 import com.facebook.stetho.Stetho
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Logger
 import com.google.gson.Gson
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -38,6 +39,7 @@ class SharedObjects : Application {
         instance = SharedObjects(this)
         super.onCreate()
         context = applicationContext
+        FirebaseDatabase.getInstance().setLogLevel(Logger.Level.DEBUG)
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
     }
 

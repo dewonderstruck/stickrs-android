@@ -25,4 +25,10 @@
     <style name="FontPath.Medium" parent="android:TextAppearance">
         <item name="fontFamily">@font/dosis_semibold</item>
     </style>
+
+    <style name="ShapeAppearance.Stickrs.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeTopRight">15dp</item>
+    </style>
 </resources>

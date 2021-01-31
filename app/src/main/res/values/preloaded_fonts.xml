@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
+        <item>@font/baloo</item>
+        <item>@font/denk_one</item>
         <item>@font/dosis_bold</item>
+        <item>@font/dosis_extrabold</item>
         <item>@font/dosis_medium</item>
         <item>@font/dosis_semibold</item>
+        <item>@font/exo_bold</item>
+        <item>@font/hanalei_fill</item>
         <item>@font/lato</item>
         <item>@font/lato_black</item>
         <item>@font/lato_light</item>
+        <item>@font/luckiest_guy</item>
+        <item>@font/mclaren</item>
         <item>@font/open_sans_semibold</item>
+        <item>@font/raleway_semibold</item>
     </array>
 </resources>
