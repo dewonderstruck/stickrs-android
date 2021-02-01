@@ -6,26 +6,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.dewonderstruck.apps.stickrs.Bean.StickersBean
 import com.dewonderstruck.apps.stickrs.adapter.StickerPackPreviewAdapter
 import com.dewonderstruck.apps.stickrs.adapter.StickersAdapter
-import com.dewonderstruck.apps.stickrs.glide.cache.ApngOptions
-import com.dewonderstruck.apps.stickrs.util.DecryptableStreamUriLoader.DecryptableUri
-import com.dewonderstruck.apps.stickrs.util.Optional
-import com.dewonderstruck.apps.stickrs.util.StickerManifest
-import com.dewonderstruck.apps.stickrs.util.StickerManifest.Sticker
-import com.dewonderstruck.apps.stickrs.util.StickerRemoteUri
-import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.android.gms.common.util.DeviceProperties
-import com.google.firebase.database.*
+import com.dewonderstruck.apps.stickrs.lib.advancedsupport.ads.admob_advanced_native_recyvlerview.AdmobNativeAdAdapter
+import com.firebase.ui.database.paging.DatabasePagingOptions
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 
 /**
@@ -37,6 +33,7 @@ class FirstFragment : Fragment() {
     private var adapter: StickersAdapter? = null
     private var adapterr: StickerPackPreviewAdapter? = null
     private var layoutManager: GridLayoutManager? = null
+    private var prg: ProgressBar? = null
 
     //    private var touchListener: StickerRolloverTouchListener? = null
     var mbase: DatabaseReference? = null
@@ -49,56 +46,82 @@ class FirstFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_first, container, false)
         val viewModel: FirstViewModel = ViewModelProvider(this).get(firstViewModel::class.java)
         val liveData: LiveData<DataSnapshot?> = viewModel.getDataSnapshotLiveData()
+        prg = root.findViewById(R.id.progressBar2)
         liveData.observe(requireActivity(),
             { databaseref ->
                 if (databaseref != null) {
                     val title = databaseref.child("author").getValue(String::class.java)
+                    recyclerView?.visibility = View.VISIBLE
+                    prg?.visibility = View.GONE
 
                 } else {
                     Log.d("FirebaseD:", "connection-error")
+                    recyclerView?.visibility = View.GONE
+                    prg?.visibility = View.VISIBLE
                 }
             })
 
         recyclerView = root.findViewById(R.id.rvlist)
         recyclerView!!.layoutManager = LinearLayoutManager(requireContext())
-        mbase =
-            FirebaseDatabase.getInstance("https://production-stickrs-default-rtdb.europe-west1.firebasedatabase.app")
+        mbase = FirebaseDatabase.getInstance("https://production-stickrs-default-rtdb.europe-west1.firebasedatabase.app")
                 .getReference("manifest")
         Log.d("FirebaseD:", mbase!!.toString())
-        val options: FirebaseRecyclerOptions<StickersBean> =
-            FirebaseRecyclerOptions.Builder<StickersBean>()
-                .setQuery(mbase!!.limitToFirst(5), StickersBean::class.java).setLifecycleOwner(
-                    this
-                )
-                .build()
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setPrefetchDistance(10)
+            .setPageSize(20)
+            .build()
+        val options: DatabasePagingOptions<StickersBean> = DatabasePagingOptions.Builder<StickersBean>()
+            .setLifecycleOwner(this)
+            .setQuery(mbase!!, config, StickersBean::class.java)
+            .build()
         adapter = StickersAdapter(options)
-        recyclerView?.adapter = adapter
         this.layoutManager = GridLayoutManager(requireContext(), 2)
-//        this.touchListener = StickerRolloverTouchListener(this, GlideApp.with(this), this, this)
-//        onScreenWidthChanged(getScreenWidth())
         stickerList = root.findViewById<RecyclerView>(R.id.sticker_install_list);
         stickerList?.setLayoutManager(layoutManager);
-        //stickerList?.addOnItemTouchListener(touchListener);
+        val admobNativeAdAdapter: AdmobNativeAdAdapter = AdmobNativeAdAdapter.Builder.with(
+            "ca-app-pub-9530431913684433/9401300966",  //admob native ad id
+            adapter,  //current adapter
+            "small" //Set the size "small", "medium" or "custom"
+        ).adItemInterval(5) //Repeat interval
+            .build()
+        recyclerView?.adapter = admobNativeAdAdapter
+        recyclerView?.setItemAnimator(null);
         stickerList?.setAdapter(adapterr);
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-    }
-
-    override fun onStart() {
-        super.onStart()
         adapter!!.startListening()
+
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         if (adapter != null) {
             adapter!!.stopListening()
-        }
+       }
     }
+
+//    override fun onStart() {
+//        super.onStart()
+//
+//    }
+
+//    override fun onStop() {
+//        super.onStop()
+//        if (adapter != null) {
+//            adapter!!.stopListening()
+//        }
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        adapter!!.notifyDataSetChanged()
+//    }
+
+
 }
 
 

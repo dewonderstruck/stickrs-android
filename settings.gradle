@@ -1,0 +1,3 @@
+include ':advancedsupport-ads'
+include ':app'
+rootProject.name = "Stickrs"
