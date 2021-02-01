@@ -11,4 +11,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="update_now">Update Now</string>
     <string name="error_nodatafound">Error! No Data</string>
+    <string name="privacy_policy">https://dewonderstruck.com/privacy-policy.html</string>
+    <string name="admob_publisher_id">pub-9530431913684433</string>
 </resources>

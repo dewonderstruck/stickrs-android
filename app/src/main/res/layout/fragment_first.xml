@@ -94,6 +94,7 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvlist"
+                            app:reverseLayout="true"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@android:color/white"
@@ -117,6 +118,7 @@
         android:layout_margin="4dp"
         android:background="@drawable/background"
         android:elevation="4dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -140,7 +142,8 @@
                 app:layout_constraintVertical_bias="0.0"
                 app:lottie_autoPlay="true"
                 app:lottie_fallbackRes="@drawable/background"
-                app:lottie_loop="true"
+                app:lottie_loop="false"
+                app:lottie_repeatCount="2"
                 app:lottie_rawRes="@raw/transition"
                 app:lottie_repeatMode="reverse"
                 app:lottie_speed="0.8" />
@@ -168,7 +171,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/baloo"
-                android:text="The App contains third party SDK's and meta-data including Google Ads, AdMob, Google Analytics for Firebase and others."
+                android:text="The App contains third party SDK's and meta-data including Google Ads, Google Analytics for Firebase and others."
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/lottieAnimationView"
@@ -184,7 +187,7 @@
 
     <ProgressBar
         android:id="@+id/progressBar2"
-        style="?android:attr/progressBarStyle"
+        style="@style/Widget.AppCompat.ProgressBar"
         android:layout_width="50dp"
         android:layout_height="49dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,6 +1,7 @@
 package com.dewonderstruck.apps.stickrs.lib.advancedsupport.ads.admob_advanced_native_recyvlerview;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.nativead.NativeAdOptions;
+import com.mopub.mobileads.dfp.adapters.MoPubAdapter;
 
 /**
  * Created by thuanle on 2/12/17.
@@ -83,6 +85,8 @@ public class AdmobNativeAdAdapter extends RecyclerViewAdapterWrapper {
     private void onBindAdViewHolder(final RecyclerView.ViewHolder holder) {
         final AdViewHolder adHolder = (AdViewHolder) holder;
         if (mParam.forceReloadAdOnBind || !adHolder.loaded) {
+            Bundle bundle = new MoPubAdapter.BundleBuilder().setPrivacyIconSize(15)
+                    .build();
             AdLoader adLoader = new AdLoader.Builder(adHolder.getContext(), mParam.admobNativeId)
                     .forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                         @Override
@@ -134,9 +138,12 @@ public class AdmobNativeAdAdapter extends RecyclerViewAdapterWrapper {
                             // used here to specify individual options settings.
                             .build())
                     .build();
-            adLoader.loadAd(new AdRequest.Builder().build());
+            adLoader.loadAd(new AdRequest.Builder().addNetworkExtrasBundle(MoPubAdapter.class, bundle).build());
+
         }
     }
+
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {

@@ -42,7 +42,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.jakewharton:butterknife:10.2.3'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation project(path: ':advancedsupport-ads')
+    implementation project(path: ':native-ads')
     kapt 'com.jakewharton:butterknife-compiler:10.2.3'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.firebaseui:firebase-ui-database:7.1.1'
@@ -57,7 +57,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-js-rhino:1.5.1'
     implementation "android.arch.paging:runtime:1.0.1"
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    kapt "android.arch.lifecycle:compiler:1.0.0"
+    kapt "android.arch.lifecycle:compiler:1.1.1"
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     def GLIDE_VERSION = "4.11.0"
     implementation "com.zlc.glide:webpdecoder:2.0.${GLIDE_VERSION}"
@@ -67,8 +67,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
+    implementation 'com.google.ads.mediation:mopub:5.15.0.1'
+    implementation 'com.google.android.ads.consent:consent-library:1.0.8'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

@@ -22,6 +22,7 @@ import com.firebase.ui.database.paging.DatabasePagingOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.android.synthetic.main.fragment_first.*
 
 
 /**
@@ -51,18 +52,26 @@ class FirstFragment : Fragment() {
             { databaseref ->
                 if (databaseref != null) {
                     val title = databaseref.child("author").getValue(String::class.java)
-                    recyclerView?.visibility = View.VISIBLE
-                    prg?.visibility = View.GONE
-
+                    disclamieranim.visibility = View.GONE
                 } else {
                     Log.d("FirebaseD:", "connection-error")
-                    recyclerView?.visibility = View.GONE
                     prg?.visibility = View.VISIBLE
                 }
             })
-
         recyclerView = root.findViewById(R.id.rvlist)
-        recyclerView!!.layoutManager = LinearLayoutManager(requireContext())
+        val mLayoutManager = LinearLayoutManager(activity)
+        mLayoutManager.reverseLayout = true
+        mLayoutManager.stackFromEnd = true
+        val linearLayoutManager = object : LinearLayoutManager(activity, VERTICAL, true)
+        {
+            override fun onLayoutCompleted(state: RecyclerView.State?)
+            {
+                super.onLayoutCompleted(state)
+                prg?.visibility = View.GONE
+                disclamieranim.visibility = View.VISIBLE
+                }
+        }
+        recyclerView!!.layoutManager = linearLayoutManager
         mbase = FirebaseDatabase.getInstance("https://production-stickrs-default-rtdb.europe-west1.firebasedatabase.app")
                 .getReference("manifest")
         Log.d("FirebaseD:", mbase!!.toString())
@@ -83,7 +92,7 @@ class FirstFragment : Fragment() {
             "ca-app-pub-9530431913684433/9401300966",  //admob native ad id
             adapter,  //current adapter
             "small" //Set the size "small", "medium" or "custom"
-        ).adItemInterval(5) //Repeat interval
+        ).adItemInterval(4) //Repeat interval
             .build()
         recyclerView?.adapter = admobNativeAdAdapter
         recyclerView?.setItemAnimator(null);
@@ -104,22 +113,6 @@ class FirstFragment : Fragment() {
        }
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//
-//    }
-
-//    override fun onStop() {
-//        super.onStop()
-//        if (adapter != null) {
-//            adapter!!.stopListening()
-//        }
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        adapter!!.notifyDataSetChanged()
-//    }
 
 
 }

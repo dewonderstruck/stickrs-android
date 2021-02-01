@@ -1,8 +1,11 @@
 package com.dewonderstruck.apps.stickrs.adapter
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,15 +39,27 @@ internal class StickersAdapter(options: DatabasePagingOptions<StickersBean>) : F
         val id = model.id
         val key = model.key
         val context =holder.title.context
+        val pm = context.packageManager
+        val isInstalled = isPackageInstalled("org.thoughtcrime.securesms", pm)
         holder.addbtn.setOnClickListener { view ->
-            val browserIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("sgnl://addstickers/?pack_id=$id&pack_key=$key")
-            )
-            context.startActivity(browserIntent)
+            if (isInstalled) {
+                val browserIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("sgnl://addstickers/?pack_id=$id&pack_key=$key")
+                )
+                context.startActivity(browserIntent)
+            } else {
+                val url = "https://signal.art/addstickers/#pack_id=$id&pack_key=$key"
+                val i = Intent(Intent.ACTION_VIEW)
+                i.data = Uri.parse(url)
+                context.startActivity(i)
+            }
+
         }
+
         val circleCrop: Transformation<Bitmap> = CircleCrop()
         Glide.with(context)
+            .asBitmap()
             .load(model.cover)
             .optionalTransform(circleCrop)
             .optionalTransform(WebpDrawable::class.java, WebpDrawableTransformation(circleCrop))
@@ -59,6 +74,8 @@ internal class StickersAdapter(options: DatabasePagingOptions<StickersBean>) : F
         )
         return eventsViewholder(view)
     }
+
+
 
     internal inner class eventsViewholder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var title: TextView
@@ -76,5 +93,14 @@ internal class StickersAdapter(options: DatabasePagingOptions<StickersBean>) : F
     }
 
     override fun onLoadingStateChanged(state: LoadingState) {
+    }
+
+    private fun isPackageInstalled(packageName: String, packageManager: PackageManager): Boolean {
+        return try {
+            packageManager.getPackageInfo(packageName, 0)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
     }
 }
