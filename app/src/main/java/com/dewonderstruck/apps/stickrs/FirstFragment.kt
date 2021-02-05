@@ -72,7 +72,7 @@ class FirstFragment : Fragment() {
                 }
         }
         recyclerView!!.layoutManager = linearLayoutManager
-        mbase = FirebaseDatabase.getInstance("https://production-stickrs-default-rtdb.europe-west1.firebasedatabase.app")
+        mbase = FirebaseDatabase.getInstance("")
                 .getReference("manifest")
         Log.d("FirebaseD:", mbase!!.toString())
         val config = PagedList.Config.Builder()
@@ -89,7 +89,7 @@ class FirstFragment : Fragment() {
         stickerList = root.findViewById<RecyclerView>(R.id.sticker_install_list);
         stickerList?.setLayoutManager(layoutManager);
         val admobNativeAdAdapter: AdmobNativeAdAdapter = AdmobNativeAdAdapter.Builder.with(
-            "ca-app-pub-9530431913684433/9401300966",  //admob native ad id
+            "",  //admob native ad id
             adapter,  //current adapter
             "small" //Set the size "small", "medium" or "custom"
         ).adItemInterval(4) //Repeat interval
